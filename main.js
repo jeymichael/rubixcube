@@ -21,7 +21,7 @@ document.body.appendChild(VRButton.createButton(renderer));
 // Create cube
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshPhongMaterial({ 
-    color: 0x00ff00,
+    color: 0xff0000,
     flatShading: true
 });
 const cube = new THREE.Mesh(geometry, material);
