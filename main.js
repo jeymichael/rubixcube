@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
+import { createTheCube } from './objects.js';
 
 // Create scene
 const scene = new THREE.Scene();
@@ -26,6 +27,10 @@ const material = new THREE.MeshPhongMaterial({
 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
+
+
+var theCube = createTheCube();
+scene.add(theCube);
 
 // Add lights
 const light = new THREE.DirectionalLight(0xffffff, 1);
