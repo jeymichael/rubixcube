@@ -4,6 +4,47 @@ import { XRHandModelFactory } from 'three/addons/webxr/XRHandModelFactory.js';
 import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js';
 import { createTheCube } from './objects.js';
 
+// Audio setup
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+// Function to create a beep sound
+function createBeep(frequency, duration, volume) {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.type = 'sine';
+    oscillator.frequency.value = frequency;
+    gainNode.gain.value = volume;
+    
+    oscillator.start();
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+    oscillator.stop(audioContext.currentTime + duration);
+}
+
+// Sound playing functions
+let lastIntersectionBeepTime = 0;
+let lastCornerBeepTime = 0;
+const BEEP_INTERVAL = 150; // Minimum ms between beeps
+
+function playIntersectionBeep() {
+    const now = Date.now();
+    if (now - lastIntersectionBeepTime > BEEP_INTERVAL) {
+        createBeep(440, 0.1, 0.1); // 440Hz (A4), 100ms duration, low volume
+        lastIntersectionBeepTime = now;
+    }
+}
+
+function playCornerBeep() {
+    const now = Date.now();
+    if (now - lastCornerBeepTime > BEEP_INTERVAL) {
+        createBeep(880, 0.1, 0.15); // 880Hz (A5), 100ms duration, slightly louder
+        lastCornerBeepTime = now;
+    }
+}
+
 // Create scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x505050);
@@ -30,7 +71,6 @@ const material = new THREE.MeshPhongMaterial({
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-
 var theCube = createTheCube();
 scene.add(theCube);
 
@@ -41,6 +81,26 @@ scene.add(light);
 
 const ambientLight = new THREE.AmbientLight(0x404040);
 scene.add(ambientLight);
+
+function highlightCornerPiece(object) {
+    // Highlight all faces of the corner piece
+    let cornerGroup = object;
+    while (cornerGroup && cornerGroup.parent) {
+        if (cornerGroup.name === "cornerPiece") {
+            break;
+        }
+        cornerGroup = cornerGroup.parent;
+    }
+
+    if (cornerGroup) {
+        cornerGroup.traverse((child) => {
+            if (child.material && child.material.emissive) {
+                // Set a golden highlight color
+                child.material.emissive.setRGB(0.5, 0.4, 0);
+            }
+        });
+    }
+}
 
 // XR Controllers and Hands setup
 const controllers = [];
@@ -129,9 +189,17 @@ function handleController(controller) {
 
         const intersection = intersections[0];
         const object = intersection.object;
+        
         if (object !== undefined && object.material !== undefined && object.material.emissive !== undefined) {
             object.material.emissive.b = 0.5;
             controller.userData.selected = object;
+
+            // Check if it's a corner piece and play corner beep
+            if (isCornerPiece(object)) {
+                playCornerBeep();
+
+                //highlightCornerPiece(object);
+            }
         }
     } else {
         if (controller.userData.selected !== undefined) {
@@ -151,6 +219,27 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+// Add this helper function before the render function
+function isCornerPiece(object) {
+    // Traverse up to find the group that represents a corner piece
+    let current = object;
+    while (current && current.parent) {
+        if (current.name === "cornerPiece") {
+            return true;
+        }
+        current = current.parent;
+    }
+    return false;
+}
+
+function clearAllHighlights(theCube) {
+    theCube.traverse((child) => {
+        if (child.material && child.material.emissive) {
+            child.material.emissive.setRGB(0, 0, 0);
+        }
+    });
+}
+
 // Animation loop
 function animate() {
     renderer.setAnimationLoop(render);
@@ -161,6 +250,9 @@ function render() {
     controllers.forEach((controller) => {
         handleController(controller);
     });
+
+    // Clear any previous highlights
+    clearAllHighlights(theCube);
 
     // Handle hand tracking
     hands.forEach((hand) => {
@@ -173,7 +265,16 @@ function render() {
             if (intersections.length > 0) {
                 const intersection = intersections[0];
                 const object = intersection.object;
-                object.material.emissive.r = 0.5;
+                
+                // Play intersection beep
+                // playIntersectionBeep();
+                
+                if (isCornerPiece(object)) {
+                    // Play corner beep
+                    playCornerBeep();
+                    
+                    //highlightCornerPiece(object);
+                }
             }
         }
     });

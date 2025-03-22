@@ -1,12 +1,38 @@
-# WebXR Cube Demo
+# WebXR Rubik's Cube
 
-A simple WebXR application that renders a rotating 3D cube using Three.js. The application can be viewed in both regular browser mode and VR mode on compatible devices.
+A virtual reality Rubik's cube application built with Three.js and WebXR, supporting both VR controllers and hand tracking.
 
-## Prerequisites
+## Features
 
-- Node.js (latest LTS version recommended)
-- A WebXR-compatible browser
-- A VR headset (for VR mode)
+- Full WebXR support for VR headsets
+- Dual input support:
+  - VR Controller tracking with visual rays
+  - Hand tracking with finger pointing
+- Interactive feedback:
+  - Visual highlighting of cube pieces
+  - Audio feedback using Web Audio API
+  - Special highlighting for corner pieces
+- High-quality 3D rendering:
+  - Antialiased graphics
+  - Phong material shading
+  - Directional and ambient lighting
+
+## Technical Details
+
+- Framework: Three.js
+- VR Support: WebXR Device API
+- Audio: Web Audio API (synthesized sounds)
+- Input Methods:
+  - XR Controller input
+  - Hand tracking via XRHandModelFactory
+  - Controller models via XRControllerModelFactory
+
+## Audio Feedback
+
+The application uses synthesized audio feedback:
+- Intersection beep: 440Hz (A4 note) for general intersections
+- Corner piece beep: 880Hz (A5 note) for corner piece interactions
+- Rate-limited to prevent audio spam (150ms minimum interval)
 
 ## Setup
 
@@ -20,18 +46,38 @@ npm install
 npm start
 ```
 
-3. Open your browser and navigate to the local server address (usually `http://localhost:5173`)
+3. Open in a WebXR-compatible browser and connect your VR headset
 
-## VR Mode
+## Controls
 
-To enter VR mode:
-1. Make sure your VR headset is connected and ready
-2. Click the "Enter VR" button at the bottom of the screen
-3. Put on your VR headset
+### VR Controllers
+- Point at cube pieces to highlight them
+- Receive audio feedback for intersections
+- Special feedback for corner pieces
 
-## Features
+### Hand Tracking
+- Use index finger to point at pieces
+- Visual and audio feedback for intersections
+- Enhanced feedback for corner pieces
 
-- Rotating 3D cube with phong material
-- WebXR support for VR viewing
-- Responsive design
-- Smooth animations 
+## Requirements
+
+- WebXR-compatible VR headset
+- WebXR-compatible browser
+- Audio-capable system
+- VR controllers or hand tracking capability
+
+## Development
+
+Built with:
+- Three.js for 3D rendering
+- WebXR for VR capabilities
+- Web Audio API for sound synthesis
+- Modern JavaScript (ES6+)
+
+## Browser Support
+
+Tested on:
+- Oculus Browser
+- Chrome with WebXR
+- Firefox with WebXR 

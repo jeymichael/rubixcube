@@ -8,12 +8,36 @@ var W = 0.25, WHALF = W / 2.0;
 var w = W / 3.0, whalf = w / 2.0;
 var torusL, torusR;
 
-var redMaterial = new THREE.MeshBasicMaterial( {color: 0xff0000, transparent:false, opacity:0.8, side: THREE.DoubleSide} );
-var whiteMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, transparent:false, opacity:0.8, side: THREE.DoubleSide} );
-var yellowMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, transparent:false, opacity:0.8, side: THREE.DoubleSide} );
-var orangeMaterial = new THREE.MeshBasicMaterial( {color: 0xffa500, transparent:false, opacity:0.8, side: THREE.DoubleSide} );
-var blueMaterial = new THREE.MeshBasicMaterial( {color: 0x0000ff, transparent:false, opacity:0.8, side: THREE.DoubleSide} );
-var greenMaterial = new THREE.MeshBasicMaterial( {color: 0x00ff00, transparent:false, opacity:0.8, side: THREE.DoubleSide} );
+var redMaterial = new THREE.MeshPhongMaterial({ 
+    color: 0xff0000, 
+    emissive: 0x000000,
+    side: THREE.DoubleSide 
+});
+var whiteMaterial = new THREE.MeshPhongMaterial({ 
+    color: 0xffffff, 
+    emissive: 0x000000,
+    side: THREE.DoubleSide 
+});
+var yellowMaterial = new THREE.MeshPhongMaterial({ 
+    color: 0xffff00, 
+    emissive: 0x000000,
+    side: THREE.DoubleSide 
+});
+var orangeMaterial = new THREE.MeshPhongMaterial({ 
+    color: 0xffa500, 
+    emissive: 0x000000,
+    side: THREE.DoubleSide 
+});
+var blueMaterial = new THREE.MeshPhongMaterial({ 
+    color: 0x0000ff, 
+    emissive: 0x000000,
+    side: THREE.DoubleSide 
+});
+var greenMaterial = new THREE.MeshPhongMaterial({ 
+    color: 0x00ff00, 
+    emissive: 0x000000,
+    side: THREE.DoubleSide 
+});
 
 var
   sideF = new Array(9),
@@ -26,7 +50,8 @@ var
 function createBaseCube()
 {
   geometry = new THREE.BoxGeometry( 0.082, 0.082, 0.082 );
-  const blackMaterial = new THREE.MeshBasicMaterial( {color: 0x000000, transparent:false, opacity:1.0, side: /*false*/THREE.DoubleSide} );
+  // const blackMaterial = new THREE.MeshBasicMaterial( {color: 0x000000, transparent:false, opacity:1.0, side: /*false*/THREE.DoubleSide} );
+  const blackMaterial = new THREE.MeshPhongMaterial( {color: 0x000000, flatShading: true} );
   const baseCube = new THREE.Mesh(geometry, blackMaterial);
   return baseCube;
 }
@@ -76,6 +101,7 @@ function createBlueSquare() {
 
 function createRAxis(group) {
   var pieceAxis = new THREE.Group();
+  pieceAxis.name = "centerPiece";
   var square = createRedSquare();
   pieceAxis.add(square);
   var bc = createBaseCube();
@@ -86,6 +112,7 @@ function createRAxis(group) {
 }
 function createYAxis(group) {
   var pieceAxis = new THREE.Group();
+  pieceAxis.name = "centerPiece";
   var square = createYellowSquare();
   pieceAxis.add(square);
   var bc = createBaseCube();
@@ -96,6 +123,7 @@ function createYAxis(group) {
 }
 function createWAxis(group) {
   var pieceAxis = new THREE.Group();
+  pieceAxis.name = "centerPiece";
   var square = createWhiteSquare();
   pieceAxis.add(square);
   var bc = createBaseCube();
@@ -106,6 +134,7 @@ function createWAxis(group) {
 }
 function createGAxis(group) {
   var pieceAxis = new THREE.Group();
+  pieceAxis.name = "centerPiece";
   var square = createGreenSquare();
   pieceAxis.add(square);
   var bc = createBaseCube();
@@ -116,6 +145,7 @@ function createGAxis(group) {
 }
 function createOAxis(group) {
   var pieceAxis = new THREE.Group();
+  pieceAxis.name = "centerPiece";
   var square = createOrangeSquare();
   pieceAxis.add(square);
   var bc = createBaseCube();
@@ -126,6 +156,7 @@ function createOAxis(group) {
 }
 function createBAxis(group) {
   var pieceAxis = new THREE.Group();
+  pieceAxis.name = "centerPiece";
   var square = createBlueSquare();
   pieceAxis.add(square);
   var bc = createBaseCube();
@@ -137,6 +168,7 @@ function createBAxis(group) {
 
 function createRYEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var r = createRedSquare();
   r.position.set( w, 0, WHALF );
   pieceEdge.add(r);
@@ -151,6 +183,7 @@ function createRYEdge(group) {
 }
 function createRWEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var r = createRedSquare();
   r.position.set( -w, 0, WHALF );
   pieceEdge.add(r);
@@ -165,6 +198,7 @@ function createRWEdge(group) {
 }
 function createRBEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var r = createRedSquare();
   r.position.set(  0, w, WHALF );
   pieceEdge.add(r);
@@ -179,6 +213,7 @@ function createRBEdge(group) {
 }
 function createRGEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var r = createRedSquare();
   r.position.set(  0, -w, WHALF );
   pieceEdge.add(r);
@@ -193,6 +228,7 @@ function createRGEdge(group) {
 }
 function createGYEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var gg = createGreenSquare();
   gg.position.set( w, -WHALF, 0 );
   pieceEdge.add(gg);
@@ -207,6 +243,7 @@ function createGYEdge(group) {
 }
 function createGWEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var gg = createGreenSquare();
   gg.position.set( -w, -WHALF, 0 );
   pieceEdge.add(gg);
@@ -221,6 +258,7 @@ function createGWEdge(group) {
 }
 function createBYEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var b = createBlueSquare();
   b.position.set( w, WHALF, 0 );
   pieceEdge.add(b);
@@ -235,6 +273,7 @@ function createBYEdge(group) {
 }
 function createBWEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var b = createBlueSquare();
   b.position.set( -w, WHALF, 0 );
   pieceEdge.add(b);
@@ -249,6 +288,7 @@ function createBWEdge(group) {
 }
 function createOYEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var o = createOrangeSquare();
   o.position.set( w, 0, -WHALF );
   pieceEdge.add(o);
@@ -263,6 +303,7 @@ function createOYEdge(group) {
 }
 function createOWEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var o = createOrangeSquare();
   o.position.set( -w, 0, -WHALF );
   pieceEdge.add(o);
@@ -277,6 +318,7 @@ function createOWEdge(group) {
 }
 function createOBEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var o = createOrangeSquare();
   o.position.set( 0, w, -WHALF );
   pieceEdge.add(o);
@@ -291,6 +333,7 @@ function createOBEdge(group) {
 }
 function createOGEdge(group) {
   var pieceEdge = new THREE.Group();
+  pieceEdge.name = "edgePiece";
   var o = createOrangeSquare();
   o.position.set( 0, -w, -WHALF );
   pieceEdge.add(o);
@@ -306,6 +349,7 @@ function createOGEdge(group) {
 
 function createRYGCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var r = createRedSquare();
   r.position.set(  w, -w, WHALF );
   pieceCorner.add(r);
@@ -323,6 +367,7 @@ function createRYGCorner(group) {
 }
 function createRWGCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var r = createRedSquare();
   r.position.set(  -w, -w, WHALF );
   pieceCorner.add(r);
@@ -340,6 +385,7 @@ function createRWGCorner(group) {
 }
 function createRYBCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var r = createRedSquare();
   r.position.set(  w, w, WHALF );
   pieceCorner.add(r);
@@ -357,6 +403,7 @@ function createRYBCorner(group) {
 }
 function createRWBCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var r = createRedSquare();
   r.position.set(  -w, w, WHALF );
   pieceCorner.add(r);
@@ -374,6 +421,7 @@ function createRWBCorner(group) {
 }
 function createOYGCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var o = createOrangeSquare();
   o.position.set(  w, -w, -WHALF );
   pieceCorner.add(o);
@@ -391,6 +439,7 @@ function createOYGCorner(group) {
 }
 function createOWGCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var o = createOrangeSquare();
   o.position.set(  -w, -w, -WHALF );
   pieceCorner.add(o);
@@ -408,6 +457,7 @@ function createOWGCorner(group) {
 }
 function createOYBCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var o = createOrangeSquare();
   o.position.set(  w, w, -WHALF );
   pieceCorner.add(o);
@@ -425,6 +475,7 @@ function createOYBCorner(group) {
 }
 function createOWBCorner(group) {
   var pieceCorner = new THREE.Group();
+  pieceCorner.name = "cornerPiece";
   var o = createOrangeSquare();
   o.position.set(  -w, w, -WHALF );
   pieceCorner.add(o);
@@ -486,7 +537,7 @@ export function createTheCube() {
   createOYBCorner(group);
   createOWBCorner(group);
 
-  createtheCubeHighlight(group);
+  //createtheCubeHighlight(group);
   group.position.set( 0, 1.35, -0.75 );
   group.scale.set( 0.5, 0.5, 0.5 );
 
